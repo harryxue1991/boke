@@ -7,7 +7,7 @@ tags:
 在写这篇文章前，先感谢我的同事飞哥。在使用pdf.js前，公司有个需求要求做一个能预览并翻页pdf的页面。在此之前，只用过PDFObject插件，但它的效果并不是很好，最后效果就是一个iframe引用pdf文件，每个浏览器的默认样式都不同，而且还没法调用它浏览器自带的方法（可能是我没找到），总之也弄得我焦头烂额。
 这时候飞哥将pdf.js推荐给我，并且指导我完成开发，让我获益匪浅。
 
->  pdf.js下载
+> pdf.js下载
 
 pdf.js 能将pdf渲染成canvas，所以是基于html5平台展示的，现在主流浏览器基本没啥问题。
 pdf.js 官方演示demo预览: http://mozilla.github.io/pdf.js/web/viewer.html
@@ -18,7 +18,7 @@ pdf.js 官方下载：http://mozilla.github.io/pdf.js/
 下载完成后，解压，看到如下图。
 ![avatar](/images/pdfjs/pdfjs_1.png)
 
->  pdf.js 使用
+> pdf.js 使用
 
 拿到build 和 web文件夹我们很懵逼(⊙o⊙)…，但是不要慌。打开build里发现有两个文件：**pdf.js** 和 **pdf.worker.js**。这两个文件是最重要的两个文件，一个负责API解析，一个负责核心解析。
 然后我们再打开web文件夹，里面有个viewer.html文件，于是，我们开心地点开，额，点开后发现pdf并不能预览。
@@ -27,7 +27,8 @@ pdf.js 官方下载：http://mozilla.github.io/pdf.js/
 
 拿到demo后怎样解读呢。其实这个确实挺麻烦的，看[官方文档](http://mozilla.github.io/pdf.js/examples/)呗
 
-1. 我们先写个简单的渲染。
+- 我们先写个简单的渲染。
+
 首先，如果只是渲染pdf页面的话，其实只要两个js就可以了。就是**pdf.js** 和 **pdf.worker.js**。按照官方例子。以下是我的demo1，可以在我的github直接下载<https://github.com/harryxue1991/mypdf>
 
 ```html
@@ -98,6 +99,10 @@ pdf.js 官方下载：http://mozilla.github.io/pdf.js/
 </script>
 ```
 
-上面的代码我做了很详细的注释，细心的同学会发现，咦，这样渲染出的pdf，不能选中文字啊。我想说：是的，这样就只是一个pdf渲染成canvas画布的方法，想要做到和demo一样可以抓取文字，那还需要多做一些。
+上面的代码我做了很详细的注释，细心的同学会发现，咦，这样渲染出的pdf，不能选中文字啊。我想说：是的，这样就只是一个pdf渲染成canvas画布的方法，想要做到和demo一样可以抓取文字，那还需要多做一些。但是我们公司需求只是用来渲染的话，应该是足够了的。
 
-2. pdf 文字版渲染
+- pdf.js高级，文字渲染版
+
+对于上面的简单版，文字渲染版就高级多了。当然并不是我们需要多敲代码，只是我们得多引入js和css。
+大家还记得上面有个web文件夹吧，它里面存放了一个demo，直接是文字渲染版的，当初飞哥就是从demo里拔代码的，厉害！
+我现在重新看一下**viewer.js**中代码，需要将pdf的demo的功能一点点剥掉，真的是很麻烦的一件事。我不知道飞哥是怎么弄的，捂脸笑哭~~。
