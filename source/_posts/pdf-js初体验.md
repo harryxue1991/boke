@@ -197,12 +197,12 @@ github地址：<https://github.com/harryxue1991/mypdf/tree/master/demo2> ，pdf2
                                 var viewport = page.getViewport(scale);
                                 scale = container.clientWidth / viewport.width;
                                 var pageView = new PDFPageView({
-                                container: container,
-                                id: page.pageNumber,
-                                scale: scale,
-                                defaultViewport: viewport,
-                                textLayerFactory: new DefaultTextLayerFactory(),
-                                annotationLayerFactory: new DefaultAnnotationLayerFactory(),
+                                        container: container,
+                                        id: page.pageNumber,
+                                        scale: scale,
+                                        defaultViewport: viewport,
+                                        textLayerFactory: new DefaultTextLayerFactory(),
+                                        annotationLayerFactory: new DefaultAnnotationLayerFactory(),
                                 });
                                 pageView.setPdfPage(page);
                                 pageView.draw();
