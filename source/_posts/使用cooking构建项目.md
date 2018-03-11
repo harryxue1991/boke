@@ -5,24 +5,25 @@ tags:
 ---
 
 今天我们来介绍一个前端项目架构工具cooking，它是饿了么的一个开源项目，可以快速创建vue或者react项目，非常方便。在使用过程中感觉还蛮好用的，特意来分享给大家。
-github地址是：https://github.com/ElemeFE/cooking
-中文API地址：http://cookingjs.github.io/zh-cn/index.html
+github地址是：<https://github.com/ElemeFE/cooking>
+中文API地址：<http://cookingjs.github.io/zh-cn/index.html>
 
 <!-- more -->
+
 ### 安装node.js
 
-首先需要安装node环境，可以直接到中文官网http://nodejs.cn/下载安装包。
+首先需要安装node环境，可以直接到中文官网<http://nodejs.cn/>下载安装包。
 只是这样安装的 node 是固定版本的，如果需要多版本的 node，可以使用 nvm 安装
-http://blog.csdn.net/s8460049/article/details/52396399
+<http://blog.csdn.net/s8460049/article/details/52396399>
 安装完成后，可以命令行工具中输入 node -v 和 npm -v，如果能显示出版本号，就说明安装成功。
-
-这里遇到过一个坑，就是安装node8.0以上版本的时候，在后面的构建项目时，node-sass总是安装不上，也许是网速的问题，我回头再试一下，所以我是使用nvm切换成**node 6.9.1**版本的时候，运行没有问题，如下图
 
 ![avatar](/images/cooking/node.png)
 
+**官方要求：首先确保是在 NPM 3+, Node 4+, Python 2.7+ 环境下运行**，所以在安装前，确保npm，node和python已经下载完并且版本都是在要求的最低之上
+
 > 安装cooking
 
-有了node，我们就可以起飞了，全局安装cooking
+第一步，全局安装cooking，没有什么问题
 
 ```shell
 npm i cooking-cli -g
@@ -40,13 +41,20 @@ npm i cooking-cli -g
 ```shell
 cooking create my-project vue
 ```
+
 如果想构建react项目，只要吧vue改成react即可
 
 ```shell
 cooking create my-project react
 ```
 
-在构建过程中，会有很多选项让你选择，按照自己的需求选择，然后回车即可。或者一路回车也行，这样就构建了简单的vue项目，后期如果想添加功能也是能改的
+这里我遇到过一个**问题**，如下图：
+
+![avatar](/images/cooking/cooking_create.png)
+因为我的电脑系统重装了，然后node这些都是重新装的，为了方便管理，node是使用nvm管理版本，使用的node版本是v8.9.3版本。
+按照github上issue解答：首先确保npm3+，然后把~/.cooking目录删掉，重新安装并执行 cooking就能解决。
+
+好吧，问题解决了，在构建过程中，会有很多选项让你选择，按照自己的需求选择，然后回车即可。或者一路回车也行，这样就构建了简单的vue项目，后期如果想添加功能也是能改的
 然后慢慢地等吧……
 
 如果在构建过程中网速不行卡住了，或者出错了，那应该是包没下载下来。好解决，简单暴力打开项目
@@ -54,6 +62,7 @@ cooking create my-project react
 ```shell
 cd my-project
 ```
+
 然后把**node-modules**删除，再自己手动下载一遍，推荐使用cnpm，或者淘宝镜像
 
 ```shell
@@ -64,9 +73,11 @@ npm install --registry=https://registry.npm.taobao.org
 ![avatar](/images/cooking/cooking_error.png)
 遇到问题先不要慌，看问题怎么描述的：意思大致是如果我们使用了vue-lodader, 需要更新**vue-template-compiler**
 找到问题了，那更新呗
-```
+
+```shell
 npm install vue-template-compiler --Save
 ```
+
 下载完，启动cooking watch，完美。
 
 ### 启动项目
@@ -76,6 +87,7 @@ npm install vue-template-compiler --Save
 ```shell
 cooking watch
 ```
+
 ![avatar](/images/cooking/start.png)
 
 如上图，项目启动成功，如果出现端口被占用的情况，我们可以在根目录下找到**cooking.conf.js**里修改端口，如下图。
@@ -85,11 +97,28 @@ cooking watch
 好吧，浏览器打开<http://127.0.0.1:8080>，现在可以开开心心地撸代码了。
 当然**cooking.conf.js**内的配置参数，可以参考[官方文档](http://cookingjs.github.io/zh-cn/configuration.html)，里面有更详细的解释。
 
+在第一次启动的时候，在**cooking.conf.js**内的extends的数组内，如果有sass选项的话，如下图
+![avatar](/images/cooking/cooking_sass.png)
+在项目启动的时候会安装自动插件sass，然后会经常安装失败，这样项目就无法启动了。
+作为老司机的我遇到这样的问题也很头痛。
+其实它自动安装的sass是**node-sass**插件，所以安装不上可能是网速问题，我们可以先手动下载安装，如果能安装成功，那再运行命令就问题不大。
+
+```shell
+npm uninstall node-sass
+npm install node-sass
+```
+
+node-sass还是蛮奇葩的，需要先卸载再安装。如果还是失败，试着用cnpm或者加上淘宝镜像。
+再不行，可能你电脑没有安装python。
+若是安装了python还是不行，那你确定下你的电脑环境有没有添加python。
+怎么添加python环境变量……自行百度吧，百度上有太多教程了，一搜一大堆。。。
+
 ### 项目打包
 
 ```shell
 cooking build
 ```
+
 ![avatar](/images/cooking/build.png)
 
 如上图，项目就打包完成了，在根目录下找到打包的文件，该扔哪扔哪。╮(╯▽╰)╭
