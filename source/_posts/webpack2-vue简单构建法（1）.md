@@ -22,6 +22,8 @@ webpack 有[中文网](https://doc.webpack-china.org/)，里面详细介绍了we
 
 本文就已webpack2为基础，构建一个简单的vue2项目吧。
 
+webpack2p[中文网](http://www.css88.com/doc/webpack2/concepts/entry-points/)
+
 ```shell
 mkdir demo1
 cd demo1
