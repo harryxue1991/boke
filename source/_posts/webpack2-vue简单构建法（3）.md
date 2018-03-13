@@ -52,66 +52,66 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 let commonConfig = {
-        entry: {
-                main: path.resolve(__dirname, 'src/main'),
-                vendors: ['vue']
-        },
-        module: {
-                rules: [{
-                                test: /\.vue$/,
-                                use: 'vue-loader'
-                        },
-                        {
-                        test: /\.js$/,
-                        use: [{
-                                loader: 'babel-loader',
-                                options: {
-                                        presets: ['es2015']
-                                }
-                        }],
-                        /* 排除安装目录的文件 */
-                        exclude: /node_modules/
-                },
-                {
-                        test: /\.css/,
-                        use: ExtractTextPlugin.extract({
-                                use: 'css-loader'
-                        })
-                },
-                {
-                        test: /\.scss$/,
-                        use: ExtractTextPlugin.extract({
-                                fallback: 'style-loader',
-                                use: ['css-loader', 'sass-loader']
-                        })
-                },
-                {
-                        test: /\.(png|woff|woff2|eot|ttf|svg|jpg)$/,
-                        loader: 'url-loader',
-                        options: {
-                                limit: 8192,
-                                name: 'images/[hash:8].[name].[ext]'
-                        }
+    entry: {
+        main: path.resolve(__dirname, 'src/main'),
+        vendors: ['vue']
+    },
+    module: {
+        rules: [{
+                test: /\.vue$/,
+                use: 'vue-loader'
+            },
+            {
+            test: /\.js$/,
+            use: [{
+                loader: 'babel-loader',
+                options: {
+                    presets: ['es2015']
                 }
-                ]
+            }],
+            /* 排除安装目录的文件 */
+            exclude: /node_modules/
         },
-        resolve: {
-                alias: {
-                        styles: path.resolve(__dirname, 'src/styles/')
-                },
-                extensions: ['.js']
+        {
+            test: /\.css/,
+            use: ExtractTextPlugin.extract({
+                use: 'css-loader'
+            })
         },
-        plugins: [
-                new ExtractTextPlugin('style.[contenthash:8].css'),
-                new HtmlWebpackPlugin({
-                        template: './template.ejs',
-                        title: '尖叫蕈',
-                        inject: 'body'
-                }),
-                new webpack.optimize.CommonsChunkPlugin({
-                        name: 'vendors'
-                })
+        {
+            test: /\.scss$/,
+            use: ExtractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: ['css-loader', 'sass-loader']
+            })
+        },
+        {
+            test: /\.(png|woff|woff2|eot|ttf|svg|jpg)$/,
+            loader: 'url-loader',
+            options: {
+                limit: 8192,
+                name: 'images/[hash:8].[name].[ext]'
+            }
+        }
         ]
+    },
+    resolve: {
+        alias: {
+            styles: path.resolve(__dirname, 'src/styles/')
+        },
+        extensions: ['.js']
+    },
+    plugins: [
+        new ExtractTextPlugin('style.[contenthash:8].css'),
+        new HtmlWebpackPlugin({
+            template: './template.ejs',
+            title: '尖叫蕈',
+            inject: 'body'
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendors'
+        })
+    ]
 };
 module.exports = commonConfig;
 ```
@@ -127,6 +127,9 @@ npm i webpack-merge --save-dev
 
 然后使用require引用刚刚写的公共代码部分，只用merge() 方法合并，这个方法是我们刚刚下载的插件提供的。
 
+> 这里我们补充个东西，就是热更新。我之前可能没有修改，那就从这里开始改吧。devServer内hot还是要选择true，支持热更新，然后把页面关闭的inline注释掉。
+接着plugins内调用webpack本身的HotModuleReplacementPlugin()方法，注册进入就可以用了
+
 ```js
 const merge = require('webpack-merge');
 const path = require('path');
@@ -141,12 +144,15 @@ module.exports = merge(common, {
     },
     devServer: {
         port: 9999,
-        inline: true,
+        hot: true,
+        // inline: true,
         // 文件更新，页面自动刷新
         historyApiFallback: true
-        }
-    }
-)
+    },
+    plugins: [
+        new webpack.HotModuleReplacementPlugin()
+    ]
+})
 ```
 
 最后我们需要在package.json里修改下script的配置
@@ -170,15 +176,15 @@ const webpack = require('webpack');
 const common = require('./webpack.common');
 
 module.exports = merge(common, {
-        output: {
-                path: path.resolve(__dirname, 'dist'),
-                publicPath: '/',
-                filename: '[name].[hash:8].js'
-        },
-        plugins: [
-                new webpack.optimize.UglifyJsPlugin({ compress: {warnings: false})
-                // js 压缩
-        ]
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        publicPath: '/',
+        filename: '[name].[hash:8].js'
+    },
+    plugins: [
+        new webpack.optimize.UglifyJsPlugin({ compress: {warnings: false})
+        // js 压缩
+    ]
 })
 ```
 
@@ -191,17 +197,17 @@ module.exports = merge(common, {
 
 ```js
 module: {
-        rules: [{
-                test: /\.js$/,
-                use: [{
-                loader: 'babel-loader',
-                options: {
-                        presets: ['es2015']
-                }
-                }],
-                /* 排除安装目录的文件 */
-                exclude: /node_modules/
-        }]
+    rules: [{
+        test: /\.js$/,
+        use: [{
+        loader: 'babel-loader',
+        options: {
+                presets: ['es2015']
+        }
+        }],
+        /* 排除安装目录的文件 */
+        exclude: /node_modules/
+    }]
 }
 ```
 
@@ -217,14 +223,14 @@ module: {
 
 ```js
 module: {
-        rules: [{
-                test: /\.(png|woff|woff2|eot|ttf|svg|jpg)$/,
-                loader: 'url-loader',
-                options: {
-                        limit: 8192,
-                        name: 'images/[hash:8].[name].[ext]'
-                }
-        }]
+    rules: [{
+        test: /\.(png|woff|woff2|eot|ttf|svg|jpg)$/,
+        loader: 'url-loader',
+        options: {
+            limit: 8192,
+            name: 'images/[hash:8].[name].[ext]'
+        }
+    }]
 }
 ```
 
