@@ -1,5 +1,5 @@
 ---
-title: webpack2-vue简单构建法（2）
+title: webpack2-vue2简单构建法（2）
 date: 2017-10-24 15:40:47
 tags:
 ---
@@ -7,12 +7,14 @@ tags:
 之前我们构建了简单的webpack2，相信大家可能下载下来试过了。然后一定发现，这个demo1除了能启动预览hello world还能干啥？
 好吧，简单的webpack肯定是不能满足我们的需求的，所以我们继续构建能能成运行vue2的webpack吧。
 
-###增加插件html-webpack-plugin
+### 增加插件html-webpack-plugin
 
 我们为什么要引用它，因为有了它，我们构建的时候，不用在index.html文件里引用添加webapck打包生成的文件了。因为它能自动引入script和link标签。
 当然它能配置多个html文件入口。这里我就不细讲了，感兴趣的同学可以网上搜索一下。-_-||
 
 好了，开始下载~~~
+
+<!-- more -->
 
 ```shell
 

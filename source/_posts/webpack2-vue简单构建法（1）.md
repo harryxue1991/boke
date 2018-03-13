@@ -1,5 +1,5 @@
 ---
-title: webpack2+vue2简单构建法（1）
+title: webpack2-vue2简单构建法（1）
 date: 2017-10-19 15:04:02
 tags:
 ---
