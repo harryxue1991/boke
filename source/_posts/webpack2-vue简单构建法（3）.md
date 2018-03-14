@@ -116,6 +116,31 @@ let commonConfig = {
 module.exports = commonConfig;
 ```
 
+这里有个**resolve**属性，我们之前没有讲到，它其中的一个功能就是定义变量。
+
+> 以下一个例子
+
+```js
+    //配置文件webpack.common.js
+    resolve: {
+        alias: {
+            styles: path.resolve(__dirname, 'src/styles/'),
+            image: path.resolve(__dirname, 'src/images/'),
+        },
+        extensions: ['.js']
+    }
+
+    //main.js
+    // 引用scr/styles下的scss文件
+    import 'styles/main.scss';
+
+    //index.vue
+    //引用src/images/下的图片
+    <img src="~image/picture.png" alt="">
+```
+
+是不是比以前更方便了呢？好吧，我们继续。
+
 公共代码，代表我们构建和打包都用得到的代码。
 
 然后我们再创建一个构建的js：**webpack.dev.js**
