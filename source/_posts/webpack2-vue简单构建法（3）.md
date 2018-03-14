@@ -127,8 +127,12 @@ npm i webpack-merge --save-dev
 
 然后使用require引用刚刚写的公共代码部分，只用merge() 方法合并，这个方法是我们刚刚下载的插件提供的。
 
-> 这里我们补充个东西，就是热更新。我之前可能没有修改，那就从这里开始改吧。devServer内hot还是要选择true，支持热更新，然后把页面关闭的inline注释掉。
+> 这里我们补充个东西，就是热更新。
+
+我之前可能没有修改，那就从这里开始改吧。devServer内hot还是要选择true，支持热更新，然后把页面关闭的inline注释掉。
 接着plugins内调用webpack本身的HotModuleReplacementPlugin()方法，注册进入就可以用了
+
+如果嫌shell打印面板内容太多，太乱，可以隐藏，只需要在devServer设置stats:"errors-only"即可
 
 ```js
 const merge = require('webpack-merge');
@@ -147,7 +151,8 @@ module.exports = merge(common, {
         hot: true,
         // inline: true,
         // 文件更新，页面自动刷新
-        historyApiFallback: true
+        historyApiFallback: true,
+        stats: "errors-only"
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin()

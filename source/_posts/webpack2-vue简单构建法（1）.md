@@ -45,7 +45,7 @@ npm init
 ```shell
 npm install --save vue    
 //安装最新版vue
-npm install --save-dev webpack@^2.1.0-beta.25 webpack-dev-server@^2.1.0-beta.9
+npm install --save-dev webpack@2.6.1 webpack-dev-server@2.4.5
 //安装webpack和webpack-dev-server，后者是开发模式下用到的
 npm install --save-dev vue-loader vue-template-compiler 
 //需要解析.vue后缀的文件，vue开发必备
