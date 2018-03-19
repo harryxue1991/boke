@@ -150,6 +150,52 @@ export default {
 }
 ```
 
+### getter
+
+getter是用于对数据进行过滤，查找用的。它可以理解为，我们不用vuex前的computed属性，只是我们用了vuex，data属性已经用到了computed属性，那么它就多给我一个getters 属性用来给我们过滤。
+
+我们在store里添加getters属性
+
+```js
+// store/index.js
+    state: {
+        like: [
+            {"id": "1",'Fruit': "apple"},
+            {"id": "2",'Fruit': "banner"},
+            {"id": "3",'Fruit': "origin"}
+        ]
+    },
+    doneLike: (state) => (id) => {
+        return state.like.find(todo => todo.id == id)
+    }
+```
+
+我们在这里给它返回一个函数，传入一个参数，当参数和like数组id一样的时候，返回当前id的那一项。
+
+好的。我们在页面里再调用getters方法。其实最简单的是**this.$store.getter.doneLike(1)**，这样就能获取到一个对象字面量。
+
+vuex同样的getter也给我了一个方法
+
+```html
+<!-- index.vue -->
+    <div class="name2">小葱喜欢吃</div>
+    <div class="fruit" v-text="doneLike(3).Fruit"></div>
+
+<script>
+    import { mapGetters } from 'vuex'
+    export default {
+        computed: {
+            ...mapGetters([
+                'doneLike',
+            ])
+        },
+    }
+</script>
+```
+
+这样就能显示效果了，如下图
+![avatar](/images/vuex/vuex_demo4.png)
+
 ### mutation
 
 上面我们明白了state的作用，基本就是存数据的，那我们有时需要改值怎么办。在页面直接修改，比方说**this.$store.state.name == '尖叫蕈'**，当然也可以直接修改，但是官方有mutiations方法，可以让我更好的追中每一个状态。
@@ -209,6 +255,7 @@ export default {
 
 但是这里只能处理同步方法，官方文档说，是因为在 mutation 中混合异步调用会导致你的程序很难调试。例如，当你能调用了两个包含异步回调的 mutation 来改变状态，你怎么知道什么时候回调和哪个先回调呢？这就是为什么我们要区分这两个概念。
 
-### getter
+### action
 
-getter是用于过滤数据用的。
+上次说到mutation是处理同步代码逻辑的。那要是遇到异步操作怎么办。vuex有个action属性，它不变更状态，但是可以提交mutation，而且是专门用来处理异步操作的。
+

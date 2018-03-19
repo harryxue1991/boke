@@ -181,6 +181,8 @@ module.exports = merge(common, {
         hot: true,
         // inline: true,
         // 文件更新，页面自动刷新
+        host: '0.0.0.0',
+        //允许本地ip访问
         historyApiFallback: true,
         stats: "errors-only"
     },
