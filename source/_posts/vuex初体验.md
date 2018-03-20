@@ -259,3 +259,184 @@ export default {
 
 上次说到mutation是处理同步代码逻辑的。那要是遇到异步操作怎么办。vuex有个action属性，它不变更状态，但是可以提交mutation，而且是专门用来处理异步操作的。
 
+我们先写**store/index.js**文件，首先引入axios，因为要异步请求数据
+
+```js
+//store/index.js
+import Vue from 'vue'
+import Vuex from 'vuex'
+import axios from 'axios'
+Vue.use(Vuex)
+
+const store = new Vuex.Store({
+    state: {
+        person: {}
+    },
+    mutations: {
+        changeperson(state,msg) {
+            state.person = msg
+        }
+    },
+    actions: {
+        getMsg({ commit }) {
+            axios({
+                method: 'get',
+                url: 'src/json/person.json'
+            }).then((res) =>{
+                commit('changeperson',res.data)
+            })
+        }
+    }
+})
+
+export default store
+```
+
+这里这个action是利用axios请求本地的一个json文件，然后请求成功后，调用mutations的方法，给state中person赋值。
+
+接着，我们在页面中应用。
+
+```html
+<!-- home.vue -->
+<el-button type="primary" @click="addMyGril">按我触发异步请求</el-button>
+<div v-if="!_.isEmpty(person)">
+    <div v-text="person.name"></div>
+    <div v-text="person.age"></div>
+    <div v-text="person.girlFriend"></div>
+</div>
+
+<script>
+    import { mapState, mapActions} from 'vuex';
+    export default {
+        computed: {
+            ...mapState({
+                person: 'person'
+            })
+        },
+        methods: {
+            addMyGril() {
+                this.$store.dispatch('getMsg')
+            }
+        }
+    }
+</script>
+```
+
+我页面的逻辑是，点击触发actions里定义的getMsg，将获取到的person渲染出来。点击试了下效果，如下：
+![avatar](/images/vuex/vuex_demo5.png)
+
+很好，获取到数据了，说明我们的异步很成功。这里说个题外话，在此刻，我写到小葱的时候，其实'小葱'不是我们吃的小葱，而是我的相亲对象。我们虽然没见过面，不过聊了快一个月了，她给我的感觉，很开朗的一个女孩，只是最近她或许有点忙，一直没怎么聊天，可能她不中意我吧。我觉得不管以后怎样结果，至少此刻，我对她是有好感的，也希望她以后能幸福。哎~一种老实人的独白。
+
+接着讲，当然vuex也给我们提供了更简单的页面触发actions方法的写法
+
+```js
+// store/index.js
+import { mapState, mapActions} from 'vuex';
+
+ methods: {
+    ...mapActions([
+        'getMsg'
+    ]),
+    addMyGril() {
+        this.getMsg()
+        // this.$store.dispatch('getMsg')
+    }
+}
+```
+
+这样写法上，就更省力了。
+
+### modules
+
+最后一个modules，它的出现可以看成是为了缓解一个store的臃肿，将数据更加精细化分类。
+
+store里写法，在外面新建一个**second.js**，里面写了所有的state,mutations, actions等，如下：
+
+```js
+// store/second.js
+const moduleA = {
+    namespaced: true,
+    state: {
+        count: 0
+    },
+    mutations: {
+        increment(state) {
+            // 这里的 `state` 对象是模块的局部状态
+            state.count++
+        }
+    },
+    getters: {
+        doubleCount(state) {
+            return state.count * 2
+        }
+    }
+}
+export default moduleA;
+```
+
+这里的**namespaced: true**是它的命名空间，因为vuex最后编译，会把所有的action、mutation 和 getter放到一个里，这样会有重复命名的可能，如果加了这个属性，它会自动根据注册路径调整命名。这样就不用担心重复命名啦
+
+然后在主store里就这样写：
+
+```js
+// store/index.js
+import second from './second'
+const store = new Vuex.Store({
+    modules: {
+        second
+    }
+})
+```
+
+好了，页面里的写法更简单，和以前基本一样
+
+```html
+<!-- page.vue -->
+<template>
+    <div>
+        <Header :activeIndex="activeIndex"></Header>
+        <div>{{count}}</div>
+        <button @click="change">按我加1</button>
+    </div>
+</template>
+<script>
+import Header from "components/Header/Header.vue";
+import { mapState, mapMutations} from 'vuex';
+export default {
+    data:() => ({
+        activeIndex:'/page',
+    }),
+    components: {
+        Header
+    },
+    computed: {
+        ...mapState('second',{
+                count: state => state.count,
+        }),
+    },
+    methods: {
+        ...mapMutations('second',{
+            change: 'increment'
+        }),
+    }
+};
+</script>
+```
+
+唯一和之前的区别，就是mapState等这些函数，第一个参数就是你在store里modules里注册的属性名。
+
+当然 ，最后看下效果，嗯，点击加1，效果不错。
+![avatar](/images/vuex/vuex_demo6.png)
+
+## 总结
+
+看到这里，我相信你对vuex基本也有了了解。它的功能强大，增删改查一个不差。而且对于页面来说，数据简单清晰。
+
+当然它也有缺点，即它的数据都是存在内存中的，刷新就会消失。
+
+网上有一种方法是将它获取到的数据存入localstorage内，这样就不用担心数据问题了。当然这是一种办法，如果有这方面需求的可以尝试存一下。
+
+余下还有问题的话，留着给以后吧。前方还有更多的东西等着我去探索。
+
+不说了，vuex就暂时到这里吧~~~。么么哒，能看到这里的亲们，一定是个gay。
+
