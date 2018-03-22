@@ -19,7 +19,7 @@ tags:
 
 嗯，大致就是这样吧。好了，说了一堆没用的话，我们先吧MongoDB安装上再说。
 
-### MongoDB 下载
+### MongoDB下载
 
 打开MongoDB官网：<https://www.mongodb.com/>，找到**Download**，然后下载。
 
@@ -51,14 +51,14 @@ tags:
 mongod --dbpath F:\data\db
 ```
 
-然后打开**http://localhost:27017**，发现，报错了。
+然后打开**<http://localhost:27017>**，发现，报错了。
 ![avatar](/images/mongodb/mongo_error.png)
 
 Σ(⊙▽⊙"a，什么鬼？ssl握手失败，按照步骤我没发现什么问题啊。这个问题确实困扰了我很久，百度了一堆，有人说是mongoDB 3.6版本的问题，降版本就可以了。
 
 我只好再重新下载个3.4版本的，下载地址：<https://www.mongodb.org/dl/win32/x86_64-2008plus-ssl>
 
-把旧的卸了，再安装。。。同样的步骤，打开**http://localhost:27017**，如下图，成了！美滋滋
+把旧的卸了，再安装。。。同样的步骤，打开**<http://localhost:27017>**，如下图，成了！美滋滋
 ![avatar](/images/mongodb/mongo_4.png)
 
 这里说个问题，要是重新打开不行的话，可以吧**F:\data\db**文件夹清空，再重新尝试一下。
@@ -74,22 +74,22 @@ mongod --dbpath F:\data\db
 
 配置文件内容：
 
-```
-#数据库路径  
+```config
+#数据库路径
 dbpath=D:\data\db
-#日志输出文件路径  
-logpath=D:\data\logs\mongo.log  
-#错误日志采用追加模式  
-logappend=true  
-#启用日志文件，默认启用  
-journal=true  
-#这个选项可以过滤掉一些无用的日志信息，若需要调试使用请设置为false  
-quiet=true  
-#端口号 默认为27017  
+#日志输出文件路径
+logpath=D:\data\logs\mongo.log
+#错误日志采用追加模式
+logappend=true
+#启用日志文件，默认启用
+journal=true
+#这个选项可以过滤掉一些无用的日志信息，若需要调试使用请设置为false
+quiet=true
+#端口号 默认为27017
 port=27017
 ```
 
-这些东西准备好了之后，我们在shell命令窗口里，输入：
+这些东西准备好了之后，我们在shell命令窗口里，输入：(注意：这里的shell一定要管理员身份运行，win10的小伙伴要win右键，选择带管理员的shell窗口才行，不然添加失败)
 
 ```js
 mongod --config "F:\data\mongo.conf" --install --serviceName "MongoDB"
