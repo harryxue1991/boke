@@ -8,7 +8,7 @@ tags:
 
 首先网上介绍，MongoDB是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。
 
-我在网上也找了关系型数据库和非关系型数据库的特点，有点和缺点，如下表：
+我在网上也找了关系型数据库和非关系型数据库的特点，优点和缺点，如下表：
 
 <!-- more -->
 
@@ -98,7 +98,7 @@ mongod --config "F:\data\mongo.conf" --install --serviceName "MongoDB"
 路径千万别写错了哦。然后我们查看我们的本地的服务
 ![avatar](/images/mongodb/mongo_6.png)
 
-看到服务里面已经有了。那我们开启最后一个命令：
+看到服务里面已经有了。那我们输入最后一个命令：
 
 ```shell
 net start MongoDB
